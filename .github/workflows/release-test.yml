@@ -7,31 +7,34 @@ jobs:
     name: "Tagged Release"
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install git ruby rpm -y
-      - name: Install fpm
-        run: gem install fpm || sudo gem install fpm
-      - name: Set up Go 1.15
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.15
-        id: go
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-      - name: Make release directory
-        run: mkdir dist
-      - name: Build deb and rpm
-        run: make deb-pkg rpm-pkg
-      - name: Move deb and rpm into release directory
-        run: mv *.deb *.rpm dist/
-      - name: Set RELEASE_VERSION
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Build darwin binary
-        run: GOOS=darwin CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin go.mozilla.org/sops/v3/cmd/sops
-      - name: Build windows binary
-        run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
-      - name: Build linux binary
-        run: GOOS=linux CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux go.mozilla.org/sops/v3/cmd/sop
-      - name: Check release directory
-        run: ls -l dist/
+  env:
+    GOPATH: ${{ github.workspace }}
+
+  steps:
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install git ruby rpm -y
+    - name: Install fpm
+      run: gem install fpm || sudo gem install fpm
+    - name: Set up Go 1.15
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+      id: go
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+    - name: Make release directory
+      run: mkdir dist
+    - name: Build deb and rpm
+      run: make deb-pkg rpm-pkg
+    - name: Move deb and rpm into release directory
+      run: mv *.deb *.rpm dist/
+    - name: Set RELEASE_VERSION
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Build darwin binary
+      run: GOOS=darwin CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin go.mozilla.org/sops/v3/cmd/sops
+    - name: Build windows binary
+      run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
+    - name: Build linux binary
+      run: GOOS=linux CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux go.mozilla.org/sops/v3/cmd/sop
+    - name: Check release directory
+      run: ls -l dist/
