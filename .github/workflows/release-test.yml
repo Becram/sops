@@ -1,9 +1,6 @@
 name: Release test workflow
 
-on:
-  push:
-    tags:
-      - "v*"
+on: push
 
 jobs:
   tagged-release:
