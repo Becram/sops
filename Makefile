@@ -51,7 +51,7 @@ functional-tests-all:
 deb-pkg: install
 	rm -rf tmppkg
 	mkdir -p tmppkg/usr/local/bin
-	GOOS=linux CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
+	GOOS=linux CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
 		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
@@ -63,7 +63,7 @@ deb-pkg: install
 rpm-pkg: install
 	rm -rf tmppkg
 	mkdir -p tmppkg/usr/local/bin
-	GOOS=linux CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
+	GOOS=linux CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
 		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
